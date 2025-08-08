@@ -2,7 +2,7 @@
 # Professional conference challenge website
 
 # Site settings
-title: "FHDA Challenge 2025"
+title: "IEEE MetroXRAINE 2025 Challenge"
 subtitle: "Forensic Handwritten Document Analysis"
 email: mirko.casu@phd.unict.it
 description: >-
@@ -179,7 +179,7 @@ collections:
 # Custom variables for the challenge
 challenge:
   year: 2025
-  conference: "IEEE MetroXRAINE 2025"
+    conference: "IEEE MetroXRAINE 2025"
   conference_url: "https://metroxraine.org/"
   registration_deadline: "May 16, 2025"
   submission_deadline: "June 20, 2025"
