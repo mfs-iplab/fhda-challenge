@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 120" class="fhda-logo">
+  <defs>
+    <linearGradient id="logoGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#3b82f6;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#f59e0b;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#10b981;stop-opacity:1" />
+    </linearGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+      <feMerge> 
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  
+  <!-- Background circle -->
+  <circle cx="60" cy="60" r="45" fill="url(#logoGradient)" opacity="0.1" filter="url(#glow)"/>
+  
+  <!-- Fingerprint icon stylized -->
+  <g transform="translate(35, 35)" fill="url(#logoGradient)" filter="url(#glow)">
+    <!-- Fingerprint lines -->
+    <path d="M25 10 C35 10, 40 15, 40 25 C40 35, 35 40, 25 40 C15 40, 10 35, 10 25 C10 15, 15 10, 25 10" stroke="currentColor" stroke-width="2" fill="none"/>
+    <path d="M25 15 C30 15, 33 18, 33 25 C33 32, 30 35, 25 35 C20 35, 17 32, 17 25 C17 18, 20 15, 25 15" stroke="currentColor" stroke-width="2" fill="none"/>
+    <path d="M25 20 C27 20, 28 21, 28 25 C28 29, 27 30, 25 30 C23 30, 22 29, 22 25 C22 21, 23 20, 25 20" stroke="currentColor" stroke-width="2" fill="none"/>
+    <circle cx="25" cy="25" r="2" fill="currentColor"/>
+  </g>
+  
+  <!-- Text -->
+  <text x="130" y="45" font-family="Inter, sans-serif" font-size="24" font-weight="800" fill="url(#logoGradient)">FHDA</text>
+  <text x="130" y="70" font-family="Inter, sans-serif" font-size="16" font-weight="500" fill="#94a3b8">Challenge 2025</text>
+  <text x="130" y="90" font-family="Inter, sans-serif" font-size="12" font-weight="400" fill="#64748b">Forensic Document Analysis</text>
+</svg>

@@ -1,0 +1,271 @@
+<!-- Modern Ultra-Modern Navbar -->
+<nav class="modern-navbar" id="modern-navbar">
+  <div class="navbar-container">
+    <div class="navbar-brand">
+      <a href="{{ '/' | relative_url }}" class="brand-link">
+        <div class="brand-icon">
+          <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <!-- Tablet (a sinistra) -->
+            <rect x="1" y="2" width="10" height="13" rx="1.5" stroke="white" stroke-width="1.2" fill="none"/>
+            <rect x="2.2" y="3.2" width="7.6" height="10.6" rx="0.8" fill="rgba(255,255,255,0.1)"/>
+            
+            <!-- Documento/Page (a destra) -->
+            <rect x="15" y="2" width="10" height="13" rx="1" fill="white" stroke="none"/>
+            <rect x="16.2" y="4" width="7.6" height="0.7" rx="0.35" fill="#26758C"/>
+            <rect x="16.2" y="5.2" width="5.5" height="0.7" rx="0.35" fill="#26758C"/>
+            <rect x="16.2" y="6.4" width="6.8" height="0.7" rx="0.35" fill="#26758C"/>
+            <rect x="16.2" y="7.6" width="4.8" height="0.7" rx="0.35" fill="#26758C"/>
+            <rect x="16.2" y="8.8" width="7.2" height="0.7" rx="0.35" fill="#26758C"/>
+            <rect x="16.2" y="10" width="5" height="0.7" rx="0.35" fill="#26758C"/>
+            <rect x="16.2" y="11.2" width="6.5" height="0.7" rx="0.35" fill="#26758C"/>
+            <rect x="16.2" y="12.4" width="6" height="0.7" rx="0.35" fill="#26758C"/>
+            
+            <!-- Penna orizzontale sotto -->
+            <rect x="6" y="20" width="16" height="1.8" rx="0.9" fill="white"/>
+            <rect x="6" y="20.2" width="3" height="1.4" rx="0.7" fill="rgba(255,255,255,0.8)"/>
+            <polygon points="22,21 23,20.5 23,21.5" fill="white"/>
+          </svg>
+        </div>
+        <div class="brand-text">
+          <span class="brand-name">{{ site.challenge.short_name | default: "FHDA" }}</span>
+          <span class="brand-year">{{ site.challenge.year | default: "2025" }}</span>
+        </div>
+      </a>
+    </div>
+
+    <div class="navbar-menu" id="navbar-menu">
+      <div class="navbar-nav">
+        <a href="{{ '/' | relative_url }}" class="nav-link {% if page.url == '/' or page.url == '/index.html' %}active{% endif %}">
+          <i class="fas fa-home"></i>
+          <span>Home</span>
+        </a>
+        
+        <a href="#challenge-overview" class="nav-link">
+          <i class="fas fa-trophy"></i>
+          <span>Challenge</span>
+        </a>
+        
+        <a href="#timeline" class="nav-link">
+          <i class="fas fa-calendar-alt"></i>
+          <span>Timeline</span>
+        </a>
+        
+        <a href="#final-rankings" class="nav-link">
+          <i class="fas fa-chart-line"></i>
+          <span>Results</span>
+        </a>
+        
+        <a href="#teams" class="nav-link">
+          <i class="fas fa-users"></i>
+          <span>Teams</span>
+        </a>
+        
+        <a href="#organizers" class="nav-link">
+          <i class="fas fa-user-tie"></i>
+          <span>Organizers</span>
+        </a>
+      </div>
+    </div>
+
+    <button class="navbar-toggle" id="navbar-toggle" aria-label="Toggle navigation">
+      <span class="toggle-line"></span>
+      <span class="toggle-line"></span>
+      <span class="toggle-line"></span>
+    </button>
+  </div>
+
+  <!-- Modern Progress Bar -->
+  <div class="navbar-progress" id="navbar-progress"></div>
+</nav>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const navbar = document.getElementById('modern-navbar');
+  const navbarToggle = document.getElementById('navbar-toggle');
+  const navbarMenu = document.getElementById('navbar-menu');
+  const progressBar = document.getElementById('navbar-progress');
+  
+  // Simplified state management
+  let currentActiveSection = null;
+  let isNavigating = false;
+  
+  // Mobile menu toggle
+  if (navbarToggle && navbarMenu) {
+    navbarToggle.addEventListener('click', function() {
+      navbarMenu.classList.toggle('active');
+      navbarToggle.classList.toggle('active');
+      document.body.classList.toggle('nav-open');
+    });
+  }
+  
+  // Scroll progress and navbar background
+  function updateNavbar() {
+    const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+    const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+    const scrollPercent = scrollTop / docHeight;
+    
+    if (progressBar) {
+      progressBar.style.transform = `scaleX(${Math.min(scrollPercent, 1)})`;
+    }
+    
+    if (navbar) {
+      if (scrollTop > 50) {
+        navbar.classList.add('scrolled');
+      } else {
+        navbar.classList.remove('scrolled');
+      }
+    }
+  }
+  
+  // Simple function to set active nav link - no conditions, just do it
+  function setActiveNavLink(targetId) {
+    document.querySelectorAll('.nav-link').forEach(link => {
+      link.classList.remove('active');
+    });
+    
+    if (targetId === 'home' || !targetId) {
+      const homeLink = document.querySelector('.nav-link[href="/"]') || 
+                      document.querySelector('.nav-link[href="{{ "/" | relative_url }}"]');
+      if (homeLink) {
+        homeLink.classList.add('active');
+      }
+    } else {
+      const targetLink = document.querySelector(`.nav-link[href="#${targetId}"]`);
+      if (targetLink) {
+        targetLink.classList.add('active');
+      }
+    }
+    currentActiveSection = targetId || 'home';
+  }
+  
+  // Handle clicks - simple and deterministic
+  document.querySelectorAll('.nav-link[href^="#"]').forEach(link => {
+    link.addEventListener('click', function(e) {
+      e.preventDefault();
+      const targetId = this.getAttribute('href').substring(1);
+      const targetElement = document.getElementById(targetId);
+      
+      if (targetElement) {
+        // Block all updates during navigation
+        isNavigating = true;
+        
+        // Close mobile menu
+        navbarMenu.classList.remove('active');
+        navbarToggle.classList.remove('active');
+        document.body.classList.remove('nav-open');
+        
+        // Set active link immediately and permanently
+        setActiveNavLink(targetId);
+        
+        // Calculate position with special handling for final-rankings
+        const navbarHeight = navbar ? navbar.offsetHeight : 70;
+        let targetPosition;
+        
+        if (targetId === 'final-rankings') {
+          // Special positioning for Results section to prevent glitches
+          targetPosition = targetElement.offsetTop - navbarHeight - 10;
+        } else {
+          targetPosition = targetElement.offsetTop - navbarHeight - 5;
+        }
+        
+        window.scrollTo({
+          top: targetPosition,
+          behavior: 'smooth'
+        });
+        
+        // Extended blocking time for final-rankings to prevent interference
+        const blockTime = targetId === 'final-rankings' ? 3000 : 2000;
+        setTimeout(() => {
+          isNavigating = false;
+        }, blockTime);
+      }
+    });
+  });
+  
+  // Simplified scroll detection - only when not navigating manually
+  function updateActiveLink() {
+    if (isNavigating) return; // Simple block - no updates during manual navigation
+    
+    const scrollY = window.scrollY;
+    const navbarHeight = navbar ? navbar.offsetHeight : 70;
+    
+    // Home detection
+    if (scrollY < 300) {
+      if (currentActiveSection !== 'home') {
+        setActiveNavLink('home');
+      }
+      return;
+    }
+    
+    // Find current section - EXACT DOM order to prevent glitches
+    const sections = [
+      'challenge-overview',  // line 16
+      'timeline',           // line 42
+      'final-rankings',     // line 79 - Results section
+      'teams',              // line 210
+      'organizers'          // line 348
+    ];
+    
+    let activeSection = null;
+    const threshold = scrollY + navbarHeight + 100; // Reduced threshold for more precise detection
+    
+    // Special handling for final-rankings (Results) section to prevent glitches
+    const finalRankingsElement = document.getElementById('final-rankings');
+    if (finalRankingsElement) {
+      const rankingsTop = finalRankingsElement.offsetTop;
+      const rankingsBottom = rankingsTop + finalRankingsElement.offsetHeight;
+      
+      // More precise detection for Results section
+      if (threshold >= rankingsTop - 50 && threshold <= rankingsBottom + 50) {
+        activeSection = 'final-rankings';
+      }
+    }
+    
+    // If not in Results section, check other sections normally
+    if (!activeSection) {
+      for (const sectionId of sections) {
+        if (sectionId === 'final-rankings') continue; // Skip, already handled above
+        
+        const element = document.getElementById(sectionId);
+        if (element) {
+          const sectionTop = element.offsetTop;
+          const sectionBottom = sectionTop + element.offsetHeight;
+          
+          if (threshold >= sectionTop && threshold <= sectionBottom) {
+            activeSection = sectionId;
+            break;
+          }
+        }
+      }
+    }
+    
+    // Only update if we found a section and it's different
+    if (activeSection && activeSection !== currentActiveSection) {
+      setActiveNavLink(activeSection);
+    }
+  }
+  
+  // Simple scroll handler with throttling
+  let scrollTimeout;
+  window.addEventListener('scroll', function() {
+    updateNavbar();
+    
+    // Throttle scroll updates to prevent glitches
+    if (scrollTimeout) clearTimeout(scrollTimeout);
+    scrollTimeout = setTimeout(updateActiveLink, 50);
+  });
+  
+  // Close mobile menu when clicking outside
+  document.addEventListener('click', function(e) {
+    if (!navbar.contains(e.target) && navbarMenu.classList.contains('active')) {
+      navbarMenu.classList.remove('active');
+      navbarToggle.classList.remove('active');
+      document.body.classList.remove('nav-open');
+    }
+  });
+  
+  // Initial setup
+  updateNavbar();
+  updateActiveLink();
+});
+</script>

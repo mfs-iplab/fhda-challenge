@@ -1,0 +1,44 @@
+main:
+  - title: "🏆 Challenge"
+    url: /#challenge-overview
+  - title: "📅 Timeline"
+    url: /#timeline
+  - title: "🎯 Objective"
+    url: /#objective
+  - title: "📊 Results"
+    url: /#final-rankings
+  - title: "👥 Teams"
+    url: /#teams
+  - title: "📖 Dataset"
+    url: /#dataset
+  - title: "📝 Register"
+    url: /#registration
+    btn_class: "btn--primary"
+  - title: "🌟 Organizers"
+    url: /#organizers
+  - title: "❓ FAQ"
+    url: /#faq
+
+footer:
+  - title: "Quick Links"
+    children:
+      - title: "Registration Form"
+        url: "https://forms.gle/cxsbwfuZRJ9rVxgN8"
+      - title: "GitHub Repository"
+        url: "https://github.com/mfs-iplab/fhda-challenge"
+      - title: "Ground Truth Data"
+        url: "/assets/ground_truth.csv"
+  - title: "Conference"
+    children:
+      - title: "IEEE MetroXRAINE 2025"
+        url: "https://metroxraine.org/"
+      - title: "Paper Submission"
+        url: "https://metroxraine.org/full-paper-submission"
+  - title: "Contact"
+    children:
+      - title: "Email Organizers"
+        url: "mailto:mirko.casu@phd.unict.it"
+      - title: "University of Catania"
+        url: "https://www.unict.it/"
+      - title: "IPLab Research Group"
+        url: "https://iplab.dmi.unict.it/"

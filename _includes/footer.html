@@ -1,0 +1,224 @@
+<!-- FHDA Challenge 2025 - Modern Footer -->
+<footer class="fhda-footer">
+  <div class="footer-background">
+    <!-- Removed footer particles animation -->
+  </div>
+  
+  <div class="footer-content">
+    <div class="footer-main">
+      <!-- Simplified footer with minimal content -->
+    </div>
+    
+    <div class="footer-bottom">
+      <div class="footer-copyright">
+        <p>
+          © {{ 'now' | date: "%Y" }} FHDA Challenge 2025. 
+          Organized by <a href="https://iplab.dmi.unict.it/" target="_blank">IPLab</a>, 
+          <a href="https://www.unict.it/" target="_blank">University of Catania</a>.
+        </p>
+        <p class="footer-note">
+          <i class="fas fa-code"></i> Built with Jekyll & Modern Web Technologies
+          <span class="separator">•</span>
+          <i class="fas fa-heart"></i> Open Science Initiative
+        </p>
+      </div>
+      
+      <div class="footer-social">
+        <a href="{{ site.challenge.github_repo }}" target="_blank" title="GitHub Repository">
+          <i class="fab fa-github"></i>
+        </a>
+        <a href="mailto:mirko.casu@phd.unict.it" title="Email Contact">
+          <i class="fas fa-envelope"></i>
+        </a>
+        <a href="https://metroxraine.org/" target="_blank" title="IEEE MetroXRAINE 2025">
+          <i class="fas fa-external-link-alt"></i>
+        </a>
+        <a href="https://www.unict.it/" target="_blank" title="University of Catania">
+          <i class="fas fa-university"></i>
+        </a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<style>
+/* Modern Footer Styles */
+.fhda-footer {
+  position: relative;
+  background: linear-gradient(135deg, var(--bg-tertiary) 0%, var(--bg-secondary) 50%, var(--bg-primary) 100%);
+  color: var(--text-primary);
+  margin-top: var(--space-4xl);
+  overflow: hidden;
+}
+
+.footer-background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  opacity: 0.1;
+}
+
+.footer-content {
+  position: relative;
+  z-index: 2;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: var(--space-lg) var(--space-xl) var(--space-md);
+}
+
+.footer-main {
+  display: flex;
+  justify-content: center;
+  margin-bottom: var(--space-md);
+}
+
+.footer-bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--space-lg);
+}
+
+.footer-copyright {
+  flex: 1;
+}
+
+.footer-copyright p {
+  margin: var(--space-xs) 0;
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+.footer-copyright a {
+  color: var(--primary-400);
+  text-decoration: none !important;
+  font-weight: 500;
+}
+
+.footer-copyright a:hover {
+  color: var(--primary-300);
+  text-decoration: none !important;
+}
+
+.footer-note {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  flex-wrap: wrap;
+}
+
+.separator {
+  color: var(--text-muted);
+  margin: 0 var(--space-xs);
+}
+
+.footer-social {
+  display: flex;
+  gap: var(--space-md);
+}
+
+.footer-social a {
+  width: 45px;
+  height: 45px;
+  background: rgba(21, 94, 117, 0.15);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(255, 255, 255, 0.9);
+  text-decoration: none !important;
+  transition: all var(--transition-normal);
+  font-size: 1.1rem;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.footer-social a:hover {
+  background: rgba(21, 94, 117, 0.25);
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+  color: rgba(255, 255, 255, 1);
+  transform: translateY(-3px) scale(1.05);
+  box-shadow: 0 8px 25px rgba(21, 94, 117, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  text-decoration: none !important;
+}
+
+/* Responsive Footer */
+@media (max-width: 768px) {
+  .footer-content {
+    padding: var(--space-2xl) var(--space-md) var(--space-lg);
+  }
+  
+  .footer-main {
+    grid-template-columns: 1fr;
+    gap: var(--space-xl);
+    text-align: center;
+  }
+  
+  .footer-links {
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-lg);
+  }
+  
+  .footer-stats {
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-md);
+  }
+  
+  .footer-bottom {
+    flex-direction: column;
+    text-align: center;
+    gap: var(--space-md);
+  }
+  
+  .footer-note {
+    justify-content: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .footer-links {
+    grid-template-columns: 1fr;
+  }
+  
+  .footer-stats {
+    grid-template-columns: 1fr;
+  }
+  
+  .footer-badges {
+    align-items: center;
+  }
+}
+</style>
+
+<script>
+// Footer interactive enhancements
+document.addEventListener('DOMContentLoaded', function() {
+  // Add hover effects to footer sections
+  document.querySelectorAll('.footer-section').forEach(section => {
+    section.addEventListener('mouseenter', function() {
+      this.style.transform = 'translateY(-2px)';
+      this.style.transition = 'transform 0.3s ease';
+    });
+    
+    section.addEventListener('mouseleave', function() {
+      this.style.transform = 'translateY(0)';
+    });
+  });
+  
+  // Add click analytics for external links
+  document.querySelectorAll('.footer-content a[target="_blank"]').forEach(link => {
+    link.addEventListener('click', function() {
+      // Analytics tracking could be added here
+      console.log('External link clicked:', this.href);
+    });
+  });
+});
+</script>

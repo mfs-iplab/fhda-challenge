@@ -1,0 +1,189 @@
+# FHDA Challenge 2025 - Ultra Modern Jekyll Site Configuration
+# Professional conference challenge website
+
+# Site settings
+title: "FHDA Challenge 2025"
+subtitle: "Forensic Handwritten Document Analysis"
+email: mirko.casu@phd.unict.it
+description: >-
+  The premier international challenge for forensic handwritten document analysis 
+  at IEEE MetroXRAINE 2025. Join researchers worldwide in advancing cross-modal 
+  authorship verification technology.
+baseurl: /fhda-challenge
+url: https://mfs-iplab.github.io
+repository: mfs-iplab/fhda-challenge
+
+# Modern theme configuration
+minimal_mistakes_skin: dark # Using dark theme for modern professional look
+search: true
+search_full_content: true
+logo: "/assets/images/fhda-logo.svg"
+
+# Site branding
+masthead_title: "FHDA 2025"
+tagline: "Forensic Handwritten Document Analysis Challenge"
+
+# Build settings
+markdown: kramdown
+remote_theme: mmistakes/minimal-mistakes@4.26.2
+highlighter: rouge
+lsi: false
+excerpt_separator: "\n\n"
+incremental: false
+
+# Outputting
+permalink: /:categories/:title/
+paginate: 10
+paginate_path: /page:num/
+timezone: Europe/Rome
+
+# Reading Files
+include:
+  - _pages
+  - _data
+  - .htaccess
+
+# Exclude from processing
+exclude:
+  - "*.sublime-project"
+  - "*.sublime-workspace"
+  - vendor
+  - .asset-cache
+  - .bundle
+  - .jekyll-assets-cache
+  - .sass-cache
+  - assets/js/plugins
+  - assets/js/_main.js
+  - assets/js/vendor
+  - Capfile
+  - CHANGELOG
+  - config
+  - Gemfile
+  - Gruntfile.js
+  - gulpfile.js
+  - LICENSE
+  - log
+  - node_modules
+  - package.json
+  - Rakefile
+  - README
+  - tmp
+
+# Plugins (previously gems:)
+plugins:
+  - jekyll-paginate
+  - jekyll-sitemap
+  - jekyll-gist
+  - jekyll-feed
+  - jemoji
+  - jekyll-include-cache
+  - jekyll-seo-tag
+
+# Site author
+author:
+  name: "FHDA Challenge Organizers"
+  avatar: "/assets/images/fhda-avatar.jpg"
+  bio: "Advancing forensic document analysis through international collaboration"
+  location: "Catania, Italy"
+  email: "mirko.casu@phd.unict.it"
+  links:
+    - label: "Challenge Repository"
+      icon: "fab fa-fw fa-github"
+      url: "https://github.com/mfs-iplab/fhda-challenge"
+    - label: "University of Catania"
+      icon: "fas fa-fw fa-university"
+      url: "https://www.unict.it/"
+    - label: "IPLab"
+      icon: "fas fa-fw fa-flask"
+      url: "https://iplab.dmi.unict.it/"
+
+# Footer configuration
+footer:
+  links:
+    - label: "GitHub Repository"
+      icon: "fab fa-fw fa-github"
+      url: "https://github.com/mfs-iplab/fhda-challenge"
+    - label: "Email Contact"
+      icon: "fas fa-fw fa-envelope-square"
+      url: "mailto:mirko.casu@phd.unict.it"
+    - label: "IEEE MetroXRAINE 2025"
+      icon: "fas fa-fw fa-external-link-alt"
+      url: "https://metroxraine.org/"
+
+# SEO and social
+social:
+  type: Organization
+  name: "FHDA Challenge 2025"
+  links:
+    - "https://github.com/mfs-iplab/fhda-challenge"
+
+# Analytics
+analytics:
+  provider: false
+
+# Comments
+comments:
+  provider: false
+
+# Reading time
+words_per_minute: 200
+
+# Feed settings
+atom_feed:
+  hide: false
+  path: /feed.xml
+
+# Default layouts and settings
+defaults:
+  # _pages
+  - scope:
+      path: ""
+      type: pages
+    values:
+      layout: single
+      author_profile: false
+      read_time: false
+      comments: false
+      share: false
+      related: false
+      sidebar:
+        nav: "main"
+  # _posts
+  - scope:
+      path: ""
+      type: posts
+    values:
+      layout: single
+      author_profile: true
+      read_time: true
+      comments: false
+      share: true
+      related: true
+
+# Archive settings
+category_archive:
+  type: liquid
+  path: /categories/
+tag_archive:
+  type: liquid
+  path: /tags/
+
+# Collections for modern content organization
+collections:
+  organizers:
+    output: true
+    permalink: /:collection/:name/
+  timeline:
+    output: false
+
+# Custom variables for the challenge
+challenge:
+  year: 2025
+  conference: "IEEE MetroXRAINE 2025"
+  conference_url: "https://metroxraine.org/"
+  registration_deadline: "May 16, 2025"
+  submission_deadline: "June 20, 2025"
+  results_date: "June 25, 2025"
+  paper_deadline: "July 20, 2025"
+  github_repo: "https://github.com/mfs-iplab/fhda-challenge"
+  registration_url: "https://forms.gle/cxsbwfuZRJ9rVxgN8"

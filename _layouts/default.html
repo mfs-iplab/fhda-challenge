@@ -1,0 +1,149 @@
+---
+---
+
+<!doctype html>
+<html lang="{{ site.locale | slice: 0,2 | default: "en" }}" class="no-js">
+  <head>
+    {% include head.html %}
+    {% include head/custom.html %}
+    
+    <!-- Modern fonts and icons -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Global background with liquid glass effect -->
+    <style>
+      /* Background image layer that can be blurred independently */
+      body::before {
+        content: '';
+        position: fixed;
+        top: -30px;
+        left: -30px;
+        right: -30px;
+        bottom: -30px;
+        background: 
+          linear-gradient(135deg, 
+            rgba(15, 15, 35, 0.5) 0%, 
+            rgba(30, 41, 59, 0.5) 50%, 
+            rgba(51, 65, 85, 0.5) 100%
+          ),
+          url('/fhda-challenge/assets/images/headernew.jpg') center center no-repeat,
+          url('./assets/images/headernew.jpg') center center no-repeat;
+        background-size: cover;
+        background-attachment: fixed;
+        z-index: 5;
+        transition: filter 0.3s ease;
+        pointer-events: none;
+        transform: scale(1.02);
+      }
+      
+      /* Blur effect classes for background only */
+      body.scrolled-past-hero::before {
+        filter: blur(2px);
+      }
+      
+      body.scrolled-far::before {
+        filter: blur(4px);
+      }
+      
+      /* Ensure content layers above background */
+      .fhda-hero,
+      .page__content,
+      .initial-content,
+      .page__footer {
+        position: relative;
+        z-index: 10;
+      }
+      
+      /* Hero and sections should be transparent to show background image */
+      .fhda-hero,
+      .page__content {
+        background: transparent !important;
+      }
+      
+      /* Ensure navbar stays above everything */
+      .modern-navbar {
+        z-index: 9999 !important;
+      }
+    </style>
+  </head>
+
+  <body class="layout--{{ page.layout | default: layout.layout }}{% if page.classes or layout.classes %}{{ page.classes | default: layout.classes | join: ' ' | prepend: ' ' }}{% endif %}">
+    {% include_cached skip-links.html %}
+    {% include_cached masthead.html %}
+
+    <div class="initial-content">
+      {{ content }}
+    </div>
+
+    {% if site.search == true %}
+      <div class="search-content">
+        {% include_cached search/search_form.html %}
+      </div>
+    {% endif %}
+
+    <div id="footer" class="page__footer">
+      <footer>
+        {% include footer/custom.html %}
+        {% include_cached footer.html %}
+      </footer>
+    </div>
+
+    {% include scripts.html %}
+    
+    <!-- Background blur effect after hero scroll -->
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        let ticking = false;
+        
+        function updateBackgroundBlur() {
+          const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+          const heroHeight = window.innerHeight; // Hero is 100vh
+          const body = document.body;
+          
+          console.log('Scroll:', scrollTop, 'Hero height:', heroHeight); // Debug
+          
+          // Remove existing blur classes
+          body.classList.remove('scrolled-past-hero', 'scrolled-far');
+          
+          // Add blur based on scroll position after hero
+          if (scrollTop > heroHeight + 300) {
+            body.classList.add('scrolled-far');
+            console.log('Added scrolled-far - should blur 4px'); // Debug
+          } else if (scrollTop > heroHeight) {
+            body.classList.add('scrolled-past-hero');
+            console.log('Added scrolled-past-hero - should blur 2px'); // Debug
+          } else {
+            console.log('No blur - in hero section'); // Debug
+          }
+          
+          // Check if classes are applied
+          console.log('Body classes:', body.className);
+          
+          ticking = false;
+        }
+        
+        function requestTick() {
+          if (!ticking) {
+            requestAnimationFrame(updateBackgroundBlur);
+            ticking = true;
+          }
+        }
+        
+        window.addEventListener('scroll', requestTick);
+        
+        // Test initial state
+        updateBackgroundBlur();
+        
+        // Test blur manually after 3 seconds for debugging
+        setTimeout(function() {
+          console.log('Testing blur manually...');
+          body.classList.add('scrolled-past-hero');
+        }, 3000);
+      });
+    </script>
+
+  </body>
+</html>
