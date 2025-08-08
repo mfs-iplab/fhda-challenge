@@ -598,6 +598,9 @@ body {
   z-index: 2;
   max-width: 1200px;
   padding: var(--space-2xl);
+  width: 100%;
+  box-sizing: border-box;
+  overflow-x: hidden;
 }
 
 .hero-badge {
@@ -658,14 +661,19 @@ body {
 .btn-hero {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: var(--space-sm);
-  padding: var(--space-lg) var(--space-xl);
+  padding: var(--space-md) var(--space-lg);
   border-radius: var(--radius-xl);
   font-weight: 600;
   text-decoration: none;
   transition: all var(--transition-normal);
   border: 2px solid transparent;
   font-size: 1.1rem;
+  min-width: 180px;
+  max-width: 220px;
+  text-align: center;
+  white-space: nowrap;
 }
 
 .btn-hero--primary {
@@ -728,6 +736,8 @@ body {
   gap: var(--space-xl);
   max-width: 600px;
   margin: -2rem auto 0;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .stat-item {
@@ -800,13 +810,46 @@ body {
   transform: translateY(0);
 }
 
+/* Force immediate backdrop-filter application for all elements */
+.notice, .timeline-item, .organizer-card, .custom-rankings-container, .custom-teams-container {
+  backdrop-filter: blur(10px) !important;
+  -webkit-backdrop-filter: blur(10px) !important;
+  /* Preload blur effect */
+  will-change: backdrop-filter;
+}
+
 .archive__subtitle {
-  font-size: 2.5rem;
+  font-size: 2rem;
   font-weight: 700;
   margin: var(--space-3xl) 0 var(--space-xl) 0;
   color: var(--text-primary);
   text-align: center;
   position: relative;
+}
+
+.archive__subtitle .header-link {
+  position: absolute;
+  right: -30px;
+  top: 50%;
+  transform: translateY(-50%);
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  text-decoration: none;
+  color: var(--primary-500);
+  font-size: 0.7em;
+  width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+.archive__subtitle:hover .header-link {
+  opacity: 0.6;
+  pointer-events: auto;
+}
+
+.archive__subtitle .header-link:hover {
+  opacity: 1;
 }
 
 .archive__subtitle::after {
@@ -821,10 +864,11 @@ body {
   border-radius: var(--radius-sm);
 }
 
-/* Modern Notice Boxes */
+/* Modern Notice Boxes - Optimized for instant blur */
 .notice {
   background: rgba(255, 255, 255, 0.05);
   backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
   border: 1px solid rgba(255, 255, 255, 0.15);
   border-radius: var(--radius-xl);
   padding: var(--space-xl);
@@ -834,6 +878,9 @@ body {
   font-size: 1rem;
   line-height: 1.6;
   text-align: center;
+  /* Optimize rendering */
+  will-change: backdrop-filter;
+  transform: translateZ(0); /* Force hardware acceleration */
 }
 
 .notice--primary {
@@ -972,12 +1019,16 @@ body {
 .timeline-item {
   background: var(--bg-card);
   backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: var(--radius-xl);
   padding: var(--space-xl);
   transition: all var(--transition-normal);
   position: relative;
   overflow: hidden;
+  /* Optimize rendering */
+  will-change: backdrop-filter, transform;
+  transform: translateZ(0); /* Force hardware acceleration */
 }
 
 /* Specific style for Challenge Timeline section boxes */
@@ -1015,9 +1066,10 @@ body {
 }
 
 /* Custom Liquid Glass Rankings Table */
-.custom-rankings-container {
+.custom-rankings-container, .custom-teams-container {
   background: rgba(255, 255, 255, 0.05);
   backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: var(--radius-xl);
   overflow: hidden;
@@ -1025,6 +1077,9 @@ body {
   box-shadow: var(--shadow-lg);
   width: fit-content;
   max-width: 100%;
+  /* Optimize rendering */
+  will-change: backdrop-filter;
+  transform: translateZ(0); /* Force hardware acceleration */
 }
 
 .custom-rankings-header {
@@ -1035,9 +1090,11 @@ body {
   background: rgba(23, 80, 100, 0.5);
   color: #ffffff;
   font-weight: 600;
-  font-size: 14px;
+  font-size: 13px;
   border-bottom: 1px solid rgba(255, 255, 255, 0.2);
   transition: all var(--transition-normal);
+  width: 100%;
+  text-align: center;
 }
 
 .custom-rankings-header:hover {
@@ -1056,8 +1113,10 @@ body {
   padding: var(--space-lg) var(--space-md);
   border-bottom: 1px solid rgba(255, 255, 255, 0.05);
   color: rgba(255, 255, 255, 0.9);
-  font-size: 14px;
+  font-size: 13px;
   transition: all var(--transition-normal);
+  width: 100%;
+  text-align: center;
 }
 
 .custom-ranking-row:hover {
@@ -1080,23 +1139,163 @@ body {
     grid-template-columns: 60px 1fr 80px 60px 60px 80px 80px;
     gap: var(--space-sm);
     padding: var(--space-md) var(--space-sm);
-    font-size: 12px;
+    font-size: 10px;
+  }
+  
+  /* Center align content in mobile tables */
+  .custom-rankings-header > div,
+  .custom-ranking-row > div {
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  /* Special handling for team name column - left align */
+  .custom-ranking-row .team-col {
+    text-align: left;
+    justify-content: flex-start;
+  }
+}
+
+/* Hide icons on smartphone */
+@media (max-width: 480px) {
+  .custom-rankings-header i,
+  .custom-ranking-row i,
+  .custom-teams-header i,
+  .custom-team-row i {
+    display: none;
+  }
+  
+  /* DIMENSIONE UNIFORME 10px PER TUTTO */
+  .custom-rankings-header,
+  .custom-ranking-row,
+  .custom-rankings-header > div,
+  .custom-ranking-row > div {
+    font-size: 10px !important;
+  }
+  
+  /* Hide winner badge on smartphone */
+  .custom-rankings-container .winner-badge {
+    display: none;
+  }
+  
+  /* CENTRATURA PERFETTA DELLA TABELLA */
+  .custom-rankings-container {
+    width: 100% !important;
+    max-width: 100vw !important;
+    margin: var(--space-xl) auto !important;
+    display: block !important;
+    text-align: center !important;
+    overflow-x: hidden !important;
+  }
+  
+  /* LAYOUT GRIGLIA OTTIMIZZATO E CENTRATO */
+  .custom-rankings-header,
+  .custom-ranking-row {
+    grid-template-columns: 30px 2fr 40px 30px 30px 45px 55px !important;
+    gap: 2px !important;
+    padding: 8px 4px !important;
+    text-align: center !important;
+    justify-items: center !important;
+    align-items: center !important;
+    width: 100% !important;
+    margin: 0 auto !important;
+    display: grid !important;
+  }
+  
+  /* ABBREVIAZIONI FORZATE PER GLI HEADER */
+  .custom-rankings-header .accuracy-col,
+  .custom-rankings-header .correct-col,
+  .custom-rankings-header .total-col,
+  .custom-rankings-header .submissions-col,
+  .custom-rankings-header .ground-truth-col {
+    font-size: 0 !important; /* Nascondi testo originale */
+    text-indent: -9999px !important; /* Forza nascondere */
+    overflow: hidden !important;
+  }
+  
+  .custom-rankings-header .accuracy-col::before {
+    content: "Acc." !important;
+    font-size: 10px !important;
+    text-indent: 0 !important;
+    display: block !important;
+  }
+  
+  .custom-rankings-header .correct-col::before {
+    content: "Corr." !important;
+    font-size: 10px !important;
+    text-indent: 0 !important;
+    display: block !important;
+  }
+  
+  .custom-rankings-header .total-col::before {
+    content: "Tot." !important;
+    font-size: 10px !important;
+    text-indent: 0 !important;
+    display: block !important;
+  }
+  
+  .custom-rankings-header .submissions-col::before {
+    content: "Subs" !important;
+    font-size: 10px !important;
+    text-indent: 0 !important;
+    display: block !important;
+  }
+  
+  .custom-rankings-header .ground-truth-col::before {
+    content: "Gr. Truth" !important;
+    font-size: 10px !important;
+    text-indent: 0 !important;
+    display: block !important;
+  }
+  
+  /* Ensure content fits within columns */
+  .custom-rankings-header > div,
+  .custom-ranking-row > div {
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    white-space: nowrap !important;
+    max-width: 100% !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    min-width: 0 !important;
+  }
+  
+  /* Team name gets more space and left alignment */
+  .custom-ranking-row .team-col {
+    text-align: left !important;
+    justify-content: flex-start !important;
+    padding-left: 2px !important;
+    line-height: 1.2 !important;
+    overflow: visible !important;
+    text-overflow: clip !important;
+    white-space: normal !important;
+    word-break: break-word !important;
+    hyphens: auto !important;
+    font-weight: 600 !important;
+  }
+  
+  /* Optimize rank column */
+  .custom-ranking-row .rank-col {
+    font-weight: 700 !important;
+    text-align: center !important;
+  }
+  
+  /* Center all data columns */
+  .custom-ranking-row .accuracy-col,
+  .custom-ranking-row .correct-col,
+  .custom-ranking-row .total-col,
+  .custom-ranking-row .submissions-col,
+  .custom-ranking-row .ground-truth-col {
+    text-align: center !important;
+    justify-content: center !important;
   }
 }
 
 /* Modern Tables */
-/* Custom Liquid Glass Teams Table */
-.custom-teams-container {
-  background: rgba(255, 255, 255, 0.05);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: var(--radius-xl);
-  overflow: hidden;
-  margin: var(--space-xl) auto;
-  box-shadow: var(--shadow-lg);
-  width: fit-content;
-  max-width: 100%;
-}
+/* Custom Liquid Glass Teams Table - styles consolidated above */
 
 .custom-teams-header {
   display: grid;
@@ -1161,23 +1360,124 @@ body {
 @media (max-width: 768px) {
   .custom-teams-header,
   .custom-team-row {
-    grid-template-columns: 1fr;
+    grid-template-columns: 120px 180px 120px 120px 1fr;
     gap: var(--space-sm);
-    padding: var(--space-md);
+    padding: var(--space-md) var(--space-sm);
+    font-size: 10px;
+  }
+  
+  /* Center align content in mobile tables */
+  .custom-teams-header > div,
+  .custom-team-row > div {
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  /* Special handling for team name column - left align */
+  .custom-team-row .team-col {
     text-align: left;
+    justify-content: flex-start;
+  }
+}
+
+/* Hide icons on smartphone for teams table */
+@media (max-width: 480px) {
+  .custom-teams-header i,
+  .custom-team-row i {
+    display: none;
   }
   
-  .custom-teams-header div,
-  .custom-team-row div {
-    padding: var(--space-sm) 0;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  /* DIMENSIONE UNIFORME 10px PER TUTTO */
+  .custom-teams-header,
+  .custom-team-row,
+  .custom-teams-header > div,
+  .custom-team-row > div {
+    font-size: 10px !important;
   }
   
-  .custom-teams-header div:before {
-    content: attr(class);
-    font-weight: bold;
-    display: block;
-    margin-bottom: var(--space-xs);
+  /* CENTRATURA PERFETTA DELLA TABELLA TEAMS */
+  .custom-teams-container {
+    width: 100% !important;
+    max-width: 100vw !important;
+    margin: var(--space-xl) auto !important;
+    display: block !important;
+    text-align: center !important;
+    overflow-x: hidden !important;
+  }
+  
+  /* LAYOUT GRIGLIA OTTIMIZZATO E CENTRATO PER TEAMS */
+  .custom-teams-header,
+  .custom-team-row {
+    grid-template-columns: 2fr 1.5fr 1fr 1fr 2fr !important;
+    gap: 2px !important;
+    padding: 8px 4px !important;
+    text-align: center !important;
+    justify-items: center !important;
+    align-items: center !important;
+    width: 100% !important;
+    margin: 0 auto !important;
+    display: grid !important;
+  }
+  
+  /* Ensure content fits within columns */
+  .custom-teams-header > div,
+  .custom-team-row > div {
+    overflow: visible !important;
+    text-overflow: clip !important;
+    white-space: normal !important;
+    max-width: 100% !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    min-width: 0 !important;
+    word-break: break-word !important;
+    hyphens: auto !important;
+    line-height: 1.3 !important;
+  }
+  
+  /* Team name gets more space and left alignment */
+  .custom-team-row .team-col {
+    text-align: left !important;
+    justify-content: flex-start !important;
+    padding-left: 2px !important;
+    line-height: 1.2 !important;
+    overflow: visible !important;
+    text-overflow: clip !important;
+    white-space: normal !important;
+    word-break: break-word !important;
+    hyphens: auto !important;
+    font-weight: 600 !important;
+  }
+  
+  /* Center all other columns with text wrapping */
+  .custom-team-row .organization-col,
+  .custom-team-row .country-col,
+  .custom-team-row .contact-col,
+  .custom-team-row .members-col {
+    text-align: center !important;
+    justify-content: center !important;
+    overflow: visible !important;
+    white-space: normal !important;
+    word-break: break-word !important;
+    hyphens: auto !important;
+    line-height: 1.2 !important;
+  }
+  
+  /* Optimize members list for mobile */
+  .team-members-list {
+    gap: 2px !important;
+    font-size: 9px !important;
+    text-align: center !important;
+  }
+  
+  .team-members-list div {
+    font-size: 9px !important;
+    line-height: 1.2 !important;
+    white-space: normal !important;
+    word-break: break-word !important;
+    overflow: visible !important;
   }
 }
 .teams-table-wrapper, .rankings-table-container {
@@ -1191,6 +1491,29 @@ body {
   box-shadow: var(--shadow-lg);
   width: fit-content;
   max-width: 100%;
+  
+  /* Smooth scrolling on mobile */
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.3) transparent;
+  
+  &::-webkit-scrollbar {
+    height: 6px;
+  }
+  
+  &::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 3px;
+  }
+  
+  &::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 3px;
+    
+    &:hover {
+      background: rgba(255, 255, 255, 0.5);
+    }
+  }
 }
 
 .teams-table, .rankings-table {
@@ -1207,10 +1530,10 @@ body {
   color: #ffffff;
   padding: var(--space-lg) var(--space-md);
   font-weight: 600;
-  text-align: left;
+  text-align: center;
   border-bottom: 1px solid rgba(255, 255, 255, 0.2);
   white-space: nowrap;
-  font-size: 14px;
+  font-size: 12px;
   box-shadow: var(--shadow-md);
 }
 
@@ -1219,7 +1542,45 @@ body {
   border-bottom: 1px solid rgba(255, 255, 255, 0.05);
   color: rgba(255, 255, 255, 0.9);
   white-space: nowrap;
-  font-size: 14px;
+  font-size: 12px;
+  text-align: center;
+}
+
+/* Mobile optimizations for standard tables */
+@media (max-width: 768px) {
+  .teams-table th, .rankings-table th {
+    padding: 8px 4px;
+    font-size: 10px;
+  }
+  
+  .teams-table td, .rankings-table td {
+    padding: 8px 4px;
+    font-size: 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .teams-table th, .rankings-table th {
+    padding: 6px 2px;
+    font-size: 8px;
+  }
+  
+  .teams-table td, .rankings-table td {
+    padding: 6px 2px;
+    font-size: 8px;
+  }
+  
+  /* Force table container to respect viewport */
+  .teams-table-wrapper, .rankings-table-container {
+    max-width: 95vw;
+    margin: var(--space-xl) auto;
+  }
+  
+  /* Optimize table width distribution */
+  .teams-table, .rankings-table {
+    min-width: 100%;
+    table-layout: fixed;
+  }
 }
 
 .teams-table tr:hover, .rankings-table tr:hover {
@@ -1268,6 +1629,9 @@ body {
   transition: all var(--transition-normal);
   position: relative;
   overflow: hidden;
+  /* Optimize rendering */
+  will-change: backdrop-filter, transform;
+  transform: translateZ(0); /* Force hardware acceleration */
 }
 
 .organizer-card::before {
@@ -1375,6 +1739,15 @@ body {
   text-decoration: none !important;
 }
 
+/* Smartphone optimization for MetroXRAINE logo */
+@media (max-width: 480px) {
+  /* Target MetroXRAINE logo specifically */
+  .metroxraine-logo {
+    height: 60px !important;
+    width: auto !important;
+  }
+}
+
 /* Modern Contact Section */
 .main-contact {
   background: rgba(21, 94, 117, 0.3);
@@ -1391,7 +1764,7 @@ body {
 .main-contact h2 {
   color: var(--text-primary);
   margin-top: 0;
-  font-size: 2rem;
+  font-size: 1.75rem;
   font-weight: 700;
 }
 
@@ -1410,21 +1783,101 @@ body {
 /* Responsive Design */
 @media (max-width: 768px) {
   .hero-content {
-    padding: var(--space-lg);
+    padding: var(--space-lg) var(--space-md);
+    max-width: 100%;
+    overflow-x: hidden;
+  }
+  
+  .hero-title {
+    font-size: clamp(1.8rem, 8vw, 2.5rem);
+    margin-bottom: var(--space-md);
+  }
+  
+  .hero-subtitle {
+    font-size: 1rem;
+    margin-bottom: var(--space-lg);
+    padding: 0 var(--space-md);
   }
   
   .hero-actions {
     flex-direction: column;
     align-items: center;
+    gap: var(--space-md);
+    margin-bottom: var(--space-xl);
+  }
+  
+  .btn-hero {
+    width: 90%;
+    max-width: 280px;
+    min-width: 200px;
+    padding: var(--space-md) var(--space-lg);
+    font-size: 1rem;
   }
   
   .hero-stats {
-    margin-top: -1rem;
-    gap: var(--space-lg);
+    margin-top: 0;
+    gap: var(--space-md);
+    max-width: 100%;
+    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+    padding: 0 var(--space-md);
+  }
+  
+  .stat-number {
+    font-size: 2rem;
+  }
+  
+  .stat-label {
+    font-size: 0.75rem;
   }
   
   .hero-scroll-indicator {
-    bottom: calc(var(--space-lg) - 0.5rem);
+    bottom: 40px;
+  }
+  
+  /* Section title responsive sizing */
+  .archive__subtitle {
+    font-size: 1.5rem;
+    margin: var(--space-xl) 0 var(--space-lg) 0;
+  }
+  
+  /* Hero text optimizations for tablets */
+  .hero-badge {
+    font-size: 0.8rem;
+    padding: var(--space-xs) var(--space-md);
+    max-width: 90%;
+    text-align: center;
+  }
+  
+  .hero-subtitle {
+    font-size: 1.1rem;
+    padding: 0 var(--space-md);
+    max-width: 100%;
+  }
+  
+  .btn-hero {
+    font-size: 1rem;
+    padding: var(--space-md) var(--space-lg);
+    min-width: 160px;
+    max-width: 200px;
+    text-align: center;
+  }
+  
+  .stat-number {
+    font-size: 2rem;
+  }
+  
+  .stat-label {
+    font-size: 0.8rem;
+  }
+  
+  /* Section titles optimization for tablets */
+  .archive__subtitle {
+    font-size: 1.75rem;
+    margin: var(--space-2xl) 0 var(--space-lg) 0;
+  }
+  
+  .main-contact h2 {
+    font-size: 1.5rem;
   }
   
   .wrapper {
@@ -1438,11 +1891,293 @@ body {
   .teams-table th, .teams-table td,
   .rankings-table th, .rankings-table td {
     padding: var(--space-sm);
-    font-size: 0.875rem;
+    font-size: 0.8rem;
+  }
+  
+  /* Custom tables responsive for tablets */
+  .custom-rankings-header, .custom-ranking-row {
+    grid-template-columns: 60px 1fr 80px 60px 60px 90px 90px;
+    gap: var(--space-xs);
+    padding: var(--space-md) var(--space-sm);
+    font-size: 12px;
+  }
+  
+  .custom-teams-header, .custom-team-row {
+    grid-template-columns: 150px 200px 120px 150px 1fr;
+    gap: var(--space-xs);
+    padding: var(--space-md) var(--space-sm);
+    font-size: 13px;
   }
   
   .logos-section {
     gap: var(--space-xl);
+  }
+}
+
+/* Mobile optimizations for smartphones */
+@media (max-width: 480px) {
+  .hero-scroll-indicator {
+    bottom: 15px;
+  }
+  
+  /* Hero content container */
+  .hero-content {
+    padding: var(--space-sm);
+    max-width: 100%;
+    overflow-x: hidden;
+  }
+  
+  /* Hero text size reduction for smartphones */
+  .hero-badge {
+    font-size: 0.75rem;
+    padding: 6px 12px;
+    max-width: 95%;
+    margin: 0 auto var(--space-lg) auto;
+    word-wrap: break-word;
+  }
+  
+  .hero-subtitle {
+    font-size: 1rem;
+    margin-bottom: var(--space-xl);
+    padding: 0 var(--space-sm);
+    max-width: 100%;
+    word-wrap: break-word;
+    line-height: 1.4;
+  }
+  
+  .hero-actions {
+    gap: var(--space-sm);
+    margin-bottom: var(--space-lg);
+  }
+  
+  .btn-hero {
+    width: 95%;
+    max-width: 260px;
+    font-size: 0.9rem;
+    padding: var(--space-sm) var(--space-md);
+  }
+  
+  .hero-stats {
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-sm);
+    padding: 0 var(--space-sm);
+    margin-top: var(--space-lg);
+  }
+  
+  .stat-number {
+    font-size: 1.5rem;
+  }
+  
+  .stat-label {
+    font-size: 0.7rem;
+  }
+  
+  /* Section titles for smartphones */
+  .archive__subtitle {
+    font-size: 1.2rem;
+    margin: var(--space-lg) 0 var(--space-md) 0;
+  }
+  
+  .main-contact h2 {
+    font-size: 1.25rem;
+  }
+  
+  .wrapper {
+    padding: var(--space-md) var(--space-sm);
+  }
+  
+  /* Standard tables for smartphones */
+  .teams-table th, .teams-table td,
+  .rankings-table th, .rankings-table td {
+    padding: var(--space-xs);
+    font-size: 0.7rem;
+    text-align: center;
+  }
+  
+  /* Hide icons in table headers for smartphones */
+  .teams-table th i, .rankings-table th i {
+    display: none;
+  }
+  
+  /* Teams and rankings table container optimization */
+  .teams-table-wrapper, .rankings-table-container {
+    margin: var(--space-lg) 0;
+    border-radius: var(--radius-md);
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    position: relative;
+    margin-bottom: var(--space-xl);
+  }
+  
+  .teams-table, .rankings-table {
+    min-width: 500px;
+    font-size: 11px;
+  }
+  
+  .winner-badge {
+    font-size: 0.6rem;
+    padding: 2px 4px;
+    margin-left: 4px;
+  }
+  
+  /* Custom tables mobile optimization */
+  .custom-rankings-container, .custom-teams-container {
+    margin: var(--space-lg) 0;
+    border-radius: var(--radius-md);
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    position: relative;
+    margin-bottom: var(--space-xl);
+  }
+  
+  .custom-teams-header, .custom-team-row {
+    grid-template-columns: 1fr;
+    gap: var(--space-xs);
+    padding: var(--space-sm);
+    text-align: left;
+    min-width: 100%;
+  }
+  
+  .custom-teams-header div, .custom-team-row div {
+    padding: var(--space-xs) 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    font-size: 9px;
+  }
+  
+  /* Team members list mobile */
+  .team-members-list div {
+    font-size: 8px;
+    line-height: 1.3;
+  }
+  
+  /* Horizontal scroll indicator for tables */
+  .teams-table-wrapper::after, .rankings-table-container::after,
+  .custom-rankings-container::after, .custom-teams-container::after {
+    content: "→ Scorri per vedere più dati";
+    position: absolute;
+    bottom: -25px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 10px;
+    color: rgba(255, 255, 255, 0.6);
+    text-align: center;
+    pointer-events: none;
+  }
+}
+
+/* Extra small screens optimization */
+@media (max-width: 400px) {
+  /* Hero text for very small screens */
+  .hero-content {
+    padding: 8px;
+  }
+  
+  .hero-badge {
+    font-size: 0.7rem;
+    padding: 4px 8px;
+    max-width: 98%;
+    margin: 0 auto var(--space-md) auto;
+  }
+  
+  .hero-subtitle {
+    font-size: 0.95rem;
+    padding: 0 8px;
+    line-height: 1.3;
+  }
+  
+  .hero-actions {
+    padding: 0 8px;
+  }
+  
+  .btn-hero {
+    font-size: 0.9rem;
+    padding: 8px 12px;
+    min-width: 120px;
+    max-width: 160px;
+  }
+  
+  .hero-stats {
+    grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+    gap: 8px;
+    padding: 0 8px;
+  }
+  
+  .stat-number {
+    font-size: 1.6rem;
+  }
+  
+  .stat-label {
+    font-size: 0.7rem;
+  }
+  
+  /* Section titles for very small screens */
+  .archive__subtitle {
+    font-size: 1.35rem;
+    margin: var(--space-lg) 0 var(--space-sm) 0;
+  }
+  
+  .main-contact h2 {
+    font-size: 1.1rem;
+  }
+  
+  /* Standard tables for very small screens */
+  .teams-table th, .teams-table td,
+  .rankings-table th, .rankings-table td {
+    padding: 4px;
+    font-size: 0.55rem;
+  }
+  .teams-table, .rankings-table {
+    min-width: 450px;
+    font-size: 9px;
+  }
+  
+  .teams-table th, .rankings-table th {
+    padding: 6px 4px;
+    font-size: 9px;
+  }
+  
+  .teams-table td, .rankings-table td {
+    padding: 6px 4px;
+    font-size: 9px;
+  }
+  
+  .winner-badge {
+    font-size: 5px;
+    padding: 1px 2px;
+  }
+  
+  /* Custom tables for extra small screens */
+  .custom-rankings-header, .custom-ranking-row {
+    grid-template-columns: 20px 2fr 35px 25px 25px 40px 50px;
+    gap: 1px;
+    padding: 4px 1px;
+    font-size: 5px;
+    min-width: 300px;
+    text-align: center;
+  }
+  
+  /* Team name optimization for extra small screens */
+  .custom-ranking-row .team-col {
+    font-size: 4px;
+    line-height: 1.0;
+    word-break: break-all;
+    overflow: visible;
+  }
+  
+  /* Even smaller winner badge for extra small screens */
+  .custom-rankings-container .winner-badge {
+    font-size: 5px;
+    padding: 1px 2px;
+    margin-left: 1px;
+  }
+  
+  .custom-teams-header div, .custom-team-row div {
+    font-size: 9px;
+    padding: 6px 0;
+  }
+  
+  .team-members-list div {
+    font-size: 8px;
   }
 }
 

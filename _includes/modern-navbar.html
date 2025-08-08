@@ -189,57 +189,64 @@ document.addEventListener('DOMContentLoaded', function() {
     const scrollY = window.scrollY;
     const navbarHeight = navbar ? navbar.offsetHeight : 70;
     
-    // Home detection
-    if (scrollY < 300) {
+    // Home detection - when we're at the top
+    if (scrollY < 150) {
       if (currentActiveSection !== 'home') {
         setActiveNavLink('home');
       }
       return;
     }
     
-    // Find current section - EXACT DOM order to prevent glitches
+    // Define sections with their exact IDs that have corresponding navbar links
     const sections = [
-      'challenge-overview',  // line 16
-      'timeline',           // line 42
-      'final-rankings',     // line 79 - Results section
-      'teams',              // line 210
-      'organizers'          // line 348
+      'challenge-overview',
+      'timeline', 
+      'final-rankings',
+      'teams',
+      'organizers'
     ];
     
     let activeSection = null;
-    const threshold = scrollY + navbarHeight + 100; // Reduced threshold for more precise detection
+    const viewportCenter = scrollY + navbarHeight + 150;
     
-    // Special handling for final-rankings (Results) section to prevent glitches
-    const finalRankingsElement = document.getElementById('final-rankings');
-    if (finalRankingsElement) {
-      const rankingsTop = finalRankingsElement.offsetTop;
-      const rankingsBottom = rankingsTop + finalRankingsElement.offsetHeight;
-      
-      // More precise detection for Results section
-      if (threshold >= rankingsTop - 50 && threshold <= rankingsBottom + 50) {
-        activeSection = 'final-rankings';
-      }
-    }
-    
-    // If not in Results section, check other sections normally
-    if (!activeSection) {
-      for (const sectionId of sections) {
-        if (sectionId === 'final-rankings') continue; // Skip, already handled above
+    // Check each section's title element (with permalink) for precise detection
+    for (const sectionId of sections) {
+      const titleElement = document.getElementById(sectionId + '-title');
+      if (titleElement) {
+        const titleTop = titleElement.offsetTop;
+        const titleBottom = titleTop + titleElement.offsetHeight;
         
-        const element = document.getElementById(sectionId);
-        if (element) {
-          const sectionTop = element.offsetTop;
-          const sectionBottom = sectionTop + element.offsetHeight;
-          
-          if (threshold >= sectionTop && threshold <= sectionBottom) {
-            activeSection = sectionId;
-            break;
-          }
+        // Section is active when its title is visible near the top of the viewport
+        if (viewportCenter >= titleTop - 100 && viewportCenter <= titleBottom + 200) {
+          activeSection = sectionId;
+          break; // Take the first match (sections are in DOM order)
         }
       }
     }
     
-    // Only update if we found a section and it's different
+    // If no exact match, find the closest section above using section elements
+    if (!activeSection) {
+      let closestSection = null;
+      let closestDistance = Infinity;
+      
+      for (const sectionId of sections) {
+        const sectionElement = document.getElementById(sectionId);
+        if (sectionElement) {
+          const sectionTop = sectionElement.offsetTop;
+          const distance = viewportCenter - sectionTop;
+          
+          // Only consider sections that are above the current position
+          if (distance >= 0 && distance < closestDistance) {
+            closestDistance = distance;
+            closestSection = sectionId;
+          }
+        }
+      }
+      
+      activeSection = closestSection;
+    }
+    
+    // Update navbar if we found an active section and it's different
     if (activeSection && activeSection !== currentActiveSection) {
       setActiveNavLink(activeSection);
     }
@@ -267,5 +274,10 @@ document.addEventListener('DOMContentLoaded', function() {
   // Initial setup
   updateNavbar();
   updateActiveLink();
+  
+  // Also call after a short delay to ensure all elements are loaded
+  setTimeout(() => {
+    updateActiveLink();
+  }, 100);
 });
 </script>

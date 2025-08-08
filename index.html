@@ -14,7 +14,7 @@ toc_sticky: true
 
 <!-- Challenge Overview Section -->
 <section id="challenge-overview" class="section-animated">
-  <h2 class="archive__subtitle">🏆 Challenge Overview</h2>
+  <h2 class="archive__subtitle" id="challenge-overview-title">🏆 Challenge Overview <a href="#challenge-overview" class="header-link" aria-label="Permalink">#</a></h2>
   
   <div class="notice notice--primary">
     <h3><i class="fas fa-bullseye"></i> Mission Statement</h3>
@@ -40,7 +40,7 @@ toc_sticky: true
 
 <!-- Timeline Section -->
 <section id="timeline" class="section-animated">
-  <h2 class="archive__subtitle">📅 Challenge Timeline</h2>
+  <h2 class="archive__subtitle" id="timeline-title">📅 Challenge Timeline <a href="#timeline" class="header-link" aria-label="Permalink">#</a></h2>
 
   <div class="notice notice--challenge-completed">
     <h3><i class="fas fa-info-circle"></i> Important: Challenge Completed</h3>
@@ -77,7 +77,7 @@ toc_sticky: true
 
 <!-- Final Rankings Section -->
 <section id="final-rankings" class="section-animated">
-  <h2 class="archive__subtitle">🏆 Final Rankings & Results</h2>
+  <h2 class="archive__subtitle" id="final-rankings-title">🏆 Final Rankings & Results <a href="#final-rankings" class="header-link" aria-label="Permalink">#</a></h2>
   
   <div class="notice notice--challenge-results">
     <h3><i class="fas fa-trophy"></i> Challenge Results - June 25, 2025</h3>
@@ -208,7 +208,7 @@ toc_sticky: true
 
 <!-- Teams Section -->
 <section id="teams" class="section-animated">
-  <h2 class="archive__subtitle">👥 Participating Teams</h2>
+  <h2 class="archive__subtitle" id="teams-title">👥 Participating Teams <a href="#teams" class="header-link" aria-label="Permalink">#</a></h2>
 
   <div class="notice notice--global-participation">
     <h3><i class="fas fa-globe"></i> Global Participation</h3>
@@ -346,7 +346,7 @@ toc_sticky: true
 
 <!-- Organizers Section -->
 <section id="organizers" class="section-animated">
-  <h2 class="archive__subtitle">🌟 Challenge Organizers</h2>
+  <h2 class="archive__subtitle" id="organizers-title">🌟 Challenge Organizers <a href="#organizers" class="header-link" aria-label="Permalink">#</a></h2>
 
   <div class="main-contact">
     <h2><i class="fas fa-envelope"></i> Main Contact</h2>
@@ -463,7 +463,7 @@ toc_sticky: true
     </div>
     <div class="logo-container">
       <a href="https://metroxraine.org/" target="_blank" rel="noopener noreferrer">
-        <img src="{{ '/assets/images/logo_metroxraine.png' | relative_url }}" alt="IEEE MetroXRAINE 2025" style="height: 100px;">
+        <img src="{{ '/assets/images/logo_metroxraine.png' | relative_url }}" alt="IEEE MetroXRAINE 2025" class="metroxraine-logo" style="height: 100px;">
       </a>
     </div>
   </div>
@@ -472,10 +472,16 @@ toc_sticky: true
 <script>
 // Enhanced interactive features for modern experience
 document.addEventListener('DOMContentLoaded', function() {
-  // Add scroll-triggered animations
+  // Force immediate backdrop-filter application for better UX
+  document.querySelectorAll('.notice, .timeline-item, .organizer-card, .custom-rankings-container, .custom-teams-container').forEach(el => {
+    el.style.backdropFilter = 'blur(10px)';
+    el.style.webkitBackdropFilter = 'blur(10px)';
+  });
+  
+  // Add scroll-triggered animations with more aggressive threshold
   const observerOptions = {
-    threshold: 0.1,
-    rootMargin: '0px 0px -50px 0px'
+    threshold: 0.05, // Trigger earlier
+    rootMargin: '50px 0px -10px 0px' // Start animation sooner
   };
   
   const observer = new IntersectionObserver((entries) => {
