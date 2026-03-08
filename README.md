@@ -95,8 +95,8 @@ The FHDA Challenge 2025 followed this timeline:
 - ✅ **June 16, 2025**: Test Set Release  
 - ✅ **June 20, 2025**: Final Submission Deadline  
 - ✅ **June 25, 2025**: Final Rankings and Ground Truth Release
-- ⏳ **July 20, 2025**: Paper Submission Deadline (Winner Invited)
-- ⏳ **TBD**: MetroXRAINE 2025 Conference & Winners Announcement
+- ✅ **July 20, 2025**: Paper Submission Deadline (Winner Invited)
+- ✅ **TBD**: MetroXRAINE 2025 Conference & Winners Announcement
 
 ## Publication Opportunities & Research Impact
 
