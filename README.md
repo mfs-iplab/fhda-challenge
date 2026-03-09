@@ -1,5 +1,14 @@
 # Forensic Handwritten Document Analysis (FHDA) Challenge 2025
 
+<div align="center">
+
+![Challenge Status](https://img.shields.io/badge/Challenge-Completed-brightgreen)
+![Conference](https://img.shields.io/badge/IEEE-MetroXRAINE%202025-blue)
+![Best Accuracy](https://img.shields.io/badge/Best%20Accuracy-64.5%25-orange)
+![Teams](https://img.shields.io/badge/Teams-3%20Participated-lightgrey)
+
+</div>
+
 <picture>
   <img alt="Logos" src="/assets/images/headernew.jpg">
 </picture>
